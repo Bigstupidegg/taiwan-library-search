@@ -67,7 +67,7 @@ def crawl_cloudlib_site_search(keyword):
             books.append({"title": link.text.strip(), "link": href})
     return books
 
-# ---------- National Central Library Search ----------
+# ---------- National Central Library Search (Public Search Site) ----------
 def crawl_ncl(keyword):
     search_url = f"https://webpac.ncl.edu.tw/F/?func=find-b&request={keyword}&find_code=WRD"
     headers = {"User-Agent": "Mozilla/5.0"}
@@ -83,7 +83,7 @@ def crawl_ncl(keyword):
             books.append({"title": title, "link": link})
     return books
 
-# ---------- MOC Ebook Google Search ----------
+# ---------- MOC 計次電子書平台 Google 搜尋 ----------
 def crawl_moc_ebook(keyword):
     search_url = f"https://www.google.com/search?q={keyword}+site:ebook.moc.gov.tw"
     headers = {"User-Agent": "Mozilla/5.0"}
@@ -116,4 +116,5 @@ def search():
     return render_template("results.html", keyword=keyword, result=result)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=10000, debug=True)
+
