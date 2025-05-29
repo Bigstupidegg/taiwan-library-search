@@ -6,37 +6,32 @@ import time
 
 app = Flask(__name__)
 
-# ---------- HyRead Crawler ----------
+# ---------- HyRead Crawler (改為 Google site 搜尋) ----------
 def crawl_hyread(keyword):
-    search_url = f"https://web.hyread.com.tw/searchList.jsp?search_field=all&search_input={keyword}"
+    search_url = f"https://www.google.com/search?q={keyword}+site:web.hyread.com.tw"
     headers = {"User-Agent": "Mozilla/5.0"}
     res = requests.get(search_url, headers=headers)
     soup = BeautifulSoup(res.text, "html.parser")
 
     books = []
-    for book in soup.select(".search_booklist .bookTitle"):
-        link_tag = book.find("a")
-        if link_tag:
-            title = link_tag.text.strip()
-            link = "https://web.hyread.com.tw" + link_tag.get("href")
-            books.append({"title": title, "link": link})
+    for link in soup.select("a"):
+        href = link.get("href")
+        if href and "web.hyread.com.tw" in href:
+            books.append({"title": link.text.strip(), "link": href})
     return books
 
-# ---------- UDN Crawler ----------
+# ---------- UDN Crawler (改為 Google site 搜尋) ----------
 def crawl_udn(keyword):
-    base_url = "https://reading.udn.com/search.do"
-    params = {"keyword": keyword}
+    search_url = f"https://www.google.com/search?q={keyword}+site:reading.udn.com"
     headers = {"User-Agent": "Mozilla/5.0"}
-    res = requests.get(base_url, params=params, headers=headers)
+    res = requests.get(search_url, headers=headers)
     soup = BeautifulSoup(res.text, "html.parser")
 
     books = []
-    for div in soup.select(".book_info_title"):
-        link_tag = div.find("a")
-        if link_tag:
-            title = link_tag.text.strip()
-            link = "https://reading.udn.com" + link_tag.get("href")
-            books.append({"title": title, "link": link})
+    for link in soup.select("a"):
+        href = link.get("href")
+        if href and "reading.udn.com" in href:
+            books.append({"title": link.text.strip(), "link": href})
     return books
 
 # ---------- Google Search Proxy for Airiti ----------
@@ -117,4 +112,5 @@ def search():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000, debug=True)
+
 
