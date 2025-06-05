@@ -17,6 +17,9 @@
 <body>
 <div class="container text-center search-container">
     <h1 class="mb-4">📚 台灣圖書館電子書搜尋</h1>
+    {% if error %}
+        <div class="alert alert-danger" role="alert">{{ error }}</div>
+    {% endif %}
     <form action="/search" method="get">
         <div class="input-group input-group-lg mb-3">
             <input type="text" class="form-control" name="q" placeholder="輸入書名或作者關鍵字" required>
